@@ -7,13 +7,13 @@ terraform {
       version = "~> 5.0"
     }
   }
-  
+
   backend "s3" {
-    bucket         = "learning-tfstate-bucket"
-    dynamodb_table = "learning-tfstate-lock"
-    region         = "eu-central-1"
-    encrypt        = true
-    profile        = "lukaZuljevic"
+    bucket       = "learning-tfstate-bucket"
+    use_lockfile = true
+    region       = "eu-central-1"
+    encrypt      = true
+    profile      = "lukaZuljevic"
   }
 }
 

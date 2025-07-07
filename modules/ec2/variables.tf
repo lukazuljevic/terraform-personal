@@ -27,3 +27,9 @@ variable "instance_count" {
   description = "The number of instances to create."
   default     = 1
 }
+
+variable "subnets" {
+  type        = list(string)
+  description = "A list of subnets to use for the instances."
+  default     = []
+}

@@ -1,8 +1,14 @@
+resource "random_shuffle" "subnets" {
+  input        = var.subnets
+  result_count = var.instance_count
+}
+
 resource "aws_instance" "ec2" {
   ami   = data.aws_ami.debian_ec2.id
   count = var.instance_count
 
   instance_type = var.instance_type
+
 
   lifecycle {
     # create_before_destroy = true
