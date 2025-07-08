@@ -20,4 +20,13 @@ module "vpc" {
     },
     var.tags
   )
+  public_subnet_tags = {
+    Role = "public"
+  }
+
+  private_subnet_tags = {
+    Role = "private"
+  }
 }
+
+
