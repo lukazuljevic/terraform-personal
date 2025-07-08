@@ -77,3 +77,35 @@ resource "aws_security_group_rule" "private_in" {
   cidr_blocks       = [module.vpc.vpc_cidr_block]
   security_group_id = aws_security_group.private_sg.id
 }
+
+
+resource "aws_security_group" "jumpbox_sg" {
+  name   = "${var.name_prefix}-vpc-jumpbox-sg"
+  vpc_id = module.vpc.vpc_id
+
+  tags = merge(
+    {
+      Name    = "${var.name_prefix}-vpc-jumpbox-sg"
+      Project = "learning-terraform"
+    }
+  )
+}
+
+resource "aws_security_group_rule" "jumpbox_inbound_ssh" {
+  type              = "ingress"
+  from_port         = 22
+  to_port           = 22
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = aws_security_group.jumpbox_sg.id
+}
+
+
+resource "aws_security_group_rule" "jumpbox_out" {
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = "-1"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = aws_security_group.jumpbox_sg.id
+}

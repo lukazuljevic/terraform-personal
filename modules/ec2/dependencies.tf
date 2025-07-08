@@ -1,6 +1,6 @@
 data "aws_ami" "debian_ec2" {
   most_recent = true
-  owners      = ["136693071363"] 
+  owners      = ["136693071363"]
 
   filter {
     name   = "name"
@@ -12,3 +12,5 @@ data "aws_ami" "debian_ec2" {
     values = ["hvm"]
   }
 }
+
+

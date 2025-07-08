@@ -1,11 +1,12 @@
-resource "aws_key_pair" "ec2_key" {
-  key_name   = "${var.name_prefix}-ssh-key"
-  public_key = var.public_key
-}
-
 resource "random_shuffle" "subnets" {
   input        = var.subnets
   result_count = var.instance_count
+}
+
+resource "aws_key_pair" "ssh_key" {
+  key_name   = "${var.name_prefix}-ssh-key"
+  public_key = var.public_key
+
 }
 
 resource "aws_instance" "ec2" {
@@ -15,7 +16,8 @@ resource "aws_instance" "ec2" {
   instance_type          = var.instance_type
   subnet_id              = random_shuffle.subnets.result[count.index]
   vpc_security_group_ids = var.security_groups
-  key_name               = aws_key_pair.ec2_key.key_name
+  key_name               = aws_key_pair.ssh_key.key_name
+
 
 
   user_data = <<-EOF
@@ -38,27 +40,27 @@ resource "aws_instance" "ec2" {
 
   tags = merge(
     {
-      Name = "learn-terraform-web-instance-${count.index + 1}"
+      Name = "${var.name_prefix}-${count.index + 1}"
     },
     var.tags
   )
 }
 
 resource "aws_eip" "web_eip" {
-  count = var.instance_count
+  count = var.assign_eip ? var.instance_count : 0
 
   # lifecycle {
   #   prevent_destroy = true
   # }
 
   tags = merge({
-    Name = "web-eip-${count.index + 1}"
+    Name = "${var.name_prefix}-${count.index + 1}"
     },
   var.tags)
 }
 
 resource "aws_eip_association" "web_eip_association" {
-  count = var.instance_count
+  count = var.assign_eip ? var.instance_count : 0
 
   instance_id   = aws_instance.ec2[count.index].id
   allocation_id = aws_eip.web_eip[count.index].id
