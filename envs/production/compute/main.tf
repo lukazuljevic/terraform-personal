@@ -4,7 +4,7 @@ module "web" {
   instance_type   = "t2.micro"
   subnets         = data.aws_subnets.public_subnets.ids
   security_groups = data.aws_security_groups.public_sg.ids
-  name_prefix     = "learn-terraform-dev"
+  name_prefix     = "learn-terraform-production"
   assign_eip      = true
 
   tags = {
@@ -21,7 +21,7 @@ module "jumpbox" {
   instance_type   = "t2.micro"
   subnets         = data.aws_subnets.public_subnets.ids
   security_groups = data.aws_security_groups.jumpbox_sg.ids
-  name_prefix     = "learn-terraform-jumpbox"
+  name_prefix     = "learn-terraform-jumpbox-production"
   assign_eip      = true
 
   tags = {
